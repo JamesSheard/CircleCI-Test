@@ -1,0 +1,16 @@
+service: BasicHTMLPage
+
+provider:
+  name: aws
+  runtime: html
+  stage: dev
+  region: eu-west-2
+
+functions:
+  status:
+    handler: handler.status
+    events:
+      - http:
+          path: status
+          method: get
+          cors: true
