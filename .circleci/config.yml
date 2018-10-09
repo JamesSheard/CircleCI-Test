@@ -1,14 +1,20 @@
 version: 2
-deployment:
-  staging:
-    branch: master
-    codedeploy:
-      appname-1234:
-        application_root: /
-        region: us-east-1
-        revision_location:
-          revision_type: S3
-          s3_location:
-            bucket: iwc-ci-demo
-            key_pattern: appname-1234-{BRANCH}-{SHORT_COMMIT}
-        deployment_group: my-deployment-group
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8.10
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+    # install python and awscli
+      - run:
+          name: Install dependencies
+          working_directory: /
+          command: sudo apt-get -y -qq install awscli
+
+      - run:
+          name: Deploy application
+          command: aws s3 cp james.html s3://iwc-ci-demo
